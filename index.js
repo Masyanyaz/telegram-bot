@@ -9,7 +9,7 @@ const token = '1247311435:AAGJySOJzjXpAjT_BP30oQEGf5Vqhpxdm4o';
 const bot = new TelegramBot(token, {polling: true});
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgres://gqaaelhuvghyfs:7313eb5fa89259d6e881f6af40cdfce1b7327a36e00ae4a8529e2954c9746ab6@ec2-34-193-232-231.compute-1.amazonaws.com:5432/d494it54r2q1f0',
   ssl: true,
 });
 client.connect();
