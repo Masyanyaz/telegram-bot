@@ -38,11 +38,27 @@ bot.onText(/\/\+ (.+)/, (msg, match) => {
   bot.sendMessage(chatId, `${resp} сохранен`);
 });
 
+// Matches "/echo [whatever]"
+bot.onText(/\/list/, (msg, match) => {
+  // 'msg' is the received Message from Telegram
+  // 'match' is the result of executing the regexp above on the text content
+  // of the message
+
+  const chatId = msg.chat.id;
+
+  fs.readFile(`${msg.chat.id}.txt`, 'utf8', function(err, contents) {
+    bot.sendMessage(chatId, contents);
+  });
+
+  // send back the matched "whatever" to the chat
+
+});
+
 bot.onText(/\/start/, (msg) => {
 
   bot.sendMessage(msg.chat.id, `Привет ${msg.from.first_name}. Чем могу помочь?`, {
     "reply_markup": {
-      "keyboard": [["Sample text", "Second sample"], ["Keyboard"], ["I'm robot"]]
+      "keyboard": [["/list", "Second sample"], ["Keyboard"], ["I'm robot"]]
     }
   });
 
