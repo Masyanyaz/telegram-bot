@@ -19,15 +19,15 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
   // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, resp);
 });
-bot.onText(/\/start/, (msg, match) => {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
 
-  const chatId = msg.chat.id;
+bot.onText(/\/start/, (msg) => {
 
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, `Привет ${msg.from.first_name}. Чем могу помочь?`);
+  bot.sendMessage(msg.chat.id, `Привет ${msg.from.first_name}. Чем могу помочь?`, {
+    "reply_markup": {
+      "keyboard": [["Sample text", "Second sample"], ["Keyboard"], ["I'm robot"]]
+    }
+  });
+
 });
 
 // Listen for any kind of message. There are different kinds of
