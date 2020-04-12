@@ -6,7 +6,14 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
-client.connect();
+
+bot.on('message', (msg) => {
+  const chatId = msg.chat.id;
+
+  // send a message to the chat acknowledging receipt of their message
+  bot.sendMessage(chatId, client);
+});
+/*client.connect();
 client.query('SELECT name FROM films;', (err, res) => {
   bot.on('message', (msg) => {
     const chatId = msg.chat.id;
@@ -15,7 +22,7 @@ client.query('SELECT name FROM films;', (err, res) => {
     bot.sendMessage(chatId, res);
   });
   client.end();
-});
+});*/
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = '1247311435:AAGJySOJzjXpAjT_BP30oQEGf5Vqhpxdm4o';
