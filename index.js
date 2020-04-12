@@ -2,27 +2,30 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const { Client } = require('pg');
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-
-/*client.connect();
-client.query('SELECT name FROM films;', (err, res) => {
-  bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-
-    // send a message to the chat acknowledging receipt of their message
-    bot.sendMessage(chatId, res);
-  });
-  client.end();
-});*/
-
 // replace the value below with the Telegram token you receive from @BotFather
 const token = '1247311435:AAGJySOJzjXpAjT_BP30oQEGf5Vqhpxdm4o';
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+client.connect();
+client.query('SELECT name FROM films;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    bot.on('message', (msg) => {
+      const chatId = msg.chat.id;
+
+      // send a message to the chat acknowledging receipt of their message
+      bot.sendMessage(chatId, JSON.stringify(row));
+    });
+  }
+  client.end();
+});
+
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
