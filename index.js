@@ -1,5 +1,19 @@
 process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+client.connect();
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = '1247311435:AAGJySOJzjXpAjT_BP30oQEGf5Vqhpxdm4o';
@@ -28,13 +42,4 @@ bot.onText(/\/start/, (msg) => {
     }
   });
 
-});
-
-// Listen for any kind of message. There are different kinds of
-// messages.
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, `Я еще не знаю этой команды(((`);
 });
