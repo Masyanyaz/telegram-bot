@@ -8,7 +8,6 @@ const client = new Client({
 });
 client.connect();
 client.query('SELECT name FROM films;', (err, res) => {
-  if (err) throw err;
   bot.sendMessage(msg.chat.id, "Hope to see you around again , Bye");
   client.end();
 });
