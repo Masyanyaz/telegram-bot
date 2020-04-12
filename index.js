@@ -1,26 +1,12 @@
 process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
-const { Client } = require('pg');
+const fs = require('fs');
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = '1247311435:AAGJySOJzjXpAjT_BP30oQEGf5Vqhpxdm4o';
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
-
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-client.connect();
-client.query('SELECT name FROM films;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-
-  }
-  client.end();
-});
-
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -33,6 +19,23 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 
   // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, resp);
+});
+
+// Matches "/echo [whatever]"
+bot.onText(/\/\+ (.+)/, (msg, match) => {
+  // 'msg' is the received Message from Telegram
+  // 'match' is the result of executing the regexp above on the text content
+  // of the message
+
+  const chatId = msg.chat.id;
+  const resp = match[1]; // the captured "whatever"
+  if (resp)
+    fs.writeFile(`${msg.chat.id}.txt`, `${resp}\r\n`, {flag: 'a+'}, err => {
+      if (err) console.error(err)
+    })
+
+  // send back the matched "whatever" to the chat
+  bot.sendMessage(chatId, `${resp} сохранен`);
 });
 
 bot.onText(/\/start/, (msg) => {
