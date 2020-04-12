@@ -7,11 +7,9 @@ const client = new Client({
   ssl: true,
 });
 client.connect();
-client.query('SELECT * FROM films;', (err, res) => {
+client.query('SELECT name FROM films;', (err, res) => {
   if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
+  bot.sendMessage(msg.chat.id, "Hope to see you around again , Bye");
   client.end();
 });
 
